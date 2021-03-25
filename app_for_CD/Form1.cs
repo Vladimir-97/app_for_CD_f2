@@ -238,24 +238,31 @@ namespace app_for_CD
 
         private void Form_agreement_Load(object sender, EventArgs e)
         {
-            //Auth auth = new Auth();   ////раскоментировать при сдаче
-            //auth.ShowDialog();
-            //if (Data.login == 1)
-            //{
+            Auth auth = new Auth();   ////раскоментировать при сдаче
+            auth.ShowDialog();
+            if (Data.login == 1)
+            {
+                if (Data.role == 0)
+                {
+                    button10.Visible = false;
+                    button3.Visible = false;
+
+                }
                 updatePanel2();
                 button_disabled();
-            //}
-            //else { 
-            
-            //    if (Data.login == 0 && Data.exit == true)
-            //    {
-            //        incorrect_pass();
-            //    }
-            //    else if (Data.login == 0 && Data.exit == false)
-            //    {
-            //        this.Close();
-            //    }
-            //}
+            }
+            else
+            {
+
+                if (Data.login == 0 && Data.exit == true)
+                {
+                    incorrect_pass();
+                }
+                else if (Data.login == 0 && Data.exit == false)
+                {
+                    this.Close();
+                }
+            }
         }
         void incorrect_pass()
         {
@@ -263,6 +270,12 @@ namespace app_for_CD
             auth.ShowDialog();
             if (Data.login == 1)
             {
+                if (Data.role == 0)
+                {
+                    button10.Visible = false;
+                    button3.Visible = false;
+
+                }
                 updatePanel2();
                 button_disabled();
             }
