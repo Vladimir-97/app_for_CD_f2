@@ -326,7 +326,7 @@ namespace app_for_CD
             //cmd.CommandText = "SELECT DISTINCT c.*, Y.DOCU_PRICE, Y.GET_DD FROM (SELECT B.DOCU_NO, B.DOCU_SRES, B.DOCU_ISSU_DD, B.DOCU_STAT_CD, A.CRP_CD, A.CRP_NM, A.DIST_ID_2, B.CRTE_DT FROM TBCB_CRP_INFO A INNER JOIN TBCB_CRP_DOCU_INFO B ON A.CRP_CD = B.CRP_CD) c , NEW_TBCB y where c.docu_no = y.docu_no and rownum <=100 AND DOCU_ISSU_DD  >= :ST_DATE  AND DOCU_ISSU_DD <= :END_DATE order by C.DOCU_ISSU_DD";
             cmd.CommandText = "SELECT DISTINCT c.*, Y.DOCU_PRICE, Y.GET_DD FROM(SELECT B.DOCU_NO, B.DOCU_SRES, B.DOCU_ISSU_DD, B.DOCU_STAT_CD, A.CRP_CD, A.CRP_NM, A.DIST_ID_2, A.crp_issu_dd FROM TBCB_CRP_INFO A INNER JOIN TBCB_CRP_DOCU_INFO B ON A.CRP_CD = B.CRP_CD) c , NEW_TBCB y where c.docu_no = y.docu_no AND C.CRP_CD = Y.CRP_CD and rownum<=100  AND DOCU_ISSU_DD  >= :ST_DATE  AND DOCU_ISSU_DD <= :END_DATE order by C.DOCU_ISSU_DD ";
 
-
+            //ыва
             bool find_val = false;
 
             cmd.CommandType = CommandType.Text;
