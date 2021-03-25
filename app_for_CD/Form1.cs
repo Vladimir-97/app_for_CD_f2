@@ -307,8 +307,9 @@ namespace app_for_CD
 
         string change_format_dateTime(string dt)
         {
-            string tmp;
-            tmp = "20" + dt[9] + dt[10] + dt[6] + dt[7] + dt[3] + dt[4];
+            string tmp ="";
+            tmp += dt[6].ToString() + dt[7].ToString() + dt[8].ToString() + dt[9].ToString();
+            tmp+= dt[3].ToString() + dt[4].ToString() + dt[0].ToString() + dt[1].ToString();
             return tmp;
         }
         private void button1_Click(object sender, EventArgs e)

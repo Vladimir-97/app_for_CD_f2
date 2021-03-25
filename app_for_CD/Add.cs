@@ -691,9 +691,12 @@ namespace app_for_CD
             }
         }
 
-        private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
+
+        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            check_value();
+            find_contract();
         }
 
         bool is_empty_str(string str)
