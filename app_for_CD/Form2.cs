@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -88,17 +89,14 @@ namespace app_for_CD
                 Data.f_s = 0;
             }
         }
-        string change_format_dateTime(string dt)
-        {
-            string tmp;
-            tmp = "20" + dt[9] + dt[10] + dt[6] + dt[7] + dt[3] + dt[4];
-            return tmp;
-        }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            Data.st_data_orig = change_format_dateTime(dateTimePicker1.Value.ToString());
-            Data.end_data_orig = change_format_dateTime(dateTimePicker2.Value.ToString());
+               
+            DateTime thisDate_st = dateTimePicker1.Value;
+            DateTime thisDate_end = dateTimePicker2.Value;
+            Data.st_date_orig = thisDate_st.ToString("yyyyMMdd").ToString();
+            Data.end_date_orig = thisDate_end.ToString("yyyyMMdd").ToString();
             CheckBox checkBox = (CheckBox)sender;
             if (checkBox.Checked == true)
             {

@@ -8,8 +8,8 @@ namespace app_for_CD
 {
     static class Data
     {
-        public static string st_data_orig { get; set; }
-        public static string end_data_orig { get; set; }
+        public static string st_date_orig { get; set; }
+        public static string end_date_orig { get; set; }
         public static int f_c { get; set; }
         public static int f_s { get; set; }
         public static int f_d { get; set; }

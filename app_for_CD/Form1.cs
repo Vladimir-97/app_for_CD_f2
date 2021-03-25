@@ -305,19 +305,12 @@ namespace app_for_CD
             updatePanel2();
         }
 
-        string change_format_dateTime(string dt)
-        {
-            string tmp ="";
-            tmp += dt[6].ToString() + dt[7].ToString() + dt[8].ToString() + dt[9].ToString();
-            tmp+= dt[3].ToString() + dt[4].ToString() + dt[0].ToString() + dt[1].ToString();
-            return tmp;
-        }
         private void button1_Click(object sender, EventArgs e)
         {
             
             string st_date, end_date;
-            st_date = change_format_dateTime(dateTimePicker1.Value.ToString());
-            end_date = change_format_dateTime(dateTimePicker2.Value.ToString());
+            st_date = dateTimePicker1.Value.ToString("yyyyMMdd");
+            end_date = dateTimePicker2.Value.ToString("yyyyMMdd");
             OracleCommand cmd = con.CreateCommand();
             cmd.Parameters.Add("ST_DATE", OracleDbType.Varchar2, 8).Value = st_date;
             cmd.Parameters.Add("END_DATE", OracleDbType.Varchar2, 8).Value = end_date;
@@ -386,21 +379,18 @@ namespace app_for_CD
             f_d = Data.f_d;
 
             if (f_c == 1 || f_s == 1 || f_d == 1) {
-
-                string st_date, end_date;
+                string request = "";
+                string request1 = "";
                 OracleCommand cmd = con.CreateCommand();
                 if (f_d == 1)
                 {
-                    st_date = change_format_dateTime(dateTimePicker1.Value.ToString());
-                    end_date = change_format_dateTime(dateTimePicker2.Value.ToString());
-                    
-                    cmd.Parameters.Add("ST_DATE", OracleDbType.Varchar2, 8).Value = st_date;
-                    cmd.Parameters.Add("END_DATE", OracleDbType.Varchar2, 8).Value = end_date;
+                    request = $" AND DOCU_ISSU_DD  >= {Data.st_date_orig}  AND DOCU_ISSU_DD <= {Data.end_date_orig} ";
                 }
                 //////////////////////         cmd.CommandText = "SELECT B.DOCU_NO, B.DOCU_SRES, B.DOCU_ISSU_DD, B.DOCU_STAT_CD, A.CRP_CD, A.CRP_NM, DIST_ID_2 FROM TBCB_CRP_INFO A INNER JOIN TBCB_CRP_DOCU_INFO B ON A.CRP_CD = B.CRP_CD where rownum <= 50 AND DOCU_ISSU_DD  > :ST_DATE  AND DOCU_ISSU_DD < :END_DATE"; ;
                 //cmd.CommandText = "SELECT DISTINCT c.*, Y.DOCU_PRICE, Y.GET_DD FROM (SELECT B.DOCU_NO, B.DOCU_SRES, B.DOCU_ISSU_DD, B.DOCU_STAT_CD, A.CRP_CD, A.CRP_NM, A.DIST_ID_2, B.CRTE_DT FROM TBCB_CRP_INFO A INNER JOIN TBCB_CRP_DOCU_INFO B ON A.CRP_CD = B.CRP_CD) c , NEW_TBCB y where c.docu_no = y.docu_no and rownum <=100 AND DOCU_ISSU_DD  >= :ST_DATE  AND DOCU_ISSU_DD <= :END_DATE order by C.DOCU_ISSU_DD";
-
-                cmd.CommandText = "SELECT DISTINCT c.*, Y.DOCU_PRICE, Y.GET_DD FROM (SELECT B.DOCU_NO, B.DOCU_SRES, B.DOCU_ISSU_DD, B.DOCU_STAT_CD, A.CRP_CD, A.CRP_NM, A.DIST_ID_2, A.crp_issu_dd FROM TBCB_CRP_INFO A INNER JOIN TBCB_CRP_DOCU_INFO B ON A.CRP_CD = B.CRP_CD) c , NEW_TBCB y where c.docu_no = y.docu_no AND C.CRP_CD = Y.CRP_CD  and rownum <=100 AND DOCU_ISSU_DD  >= :ST_DATE  AND DOCU_ISSU_DD <= :END_DATE order by CASE When '" + f_d + "' = 1 THEN C.DOCU_ISSU_DD END ASC ";
+                request1 = "SELECT DISTINCT c.*, Y.DOCU_PRICE, Y.GET_DD FROM (SELECT B.DOCU_NO, B.DOCU_SRES, B.DOCU_ISSU_DD, B.DOCU_STAT_CD, A.CRP_CD, A.CRP_NM, A.DIST_ID_2, A.crp_issu_dd FROM TBCB_CRP_INFO A INNER JOIN TBCB_CRP_DOCU_INFO B ON A.CRP_CD = B.CRP_CD) c , NEW_TBCB y where c.docu_no = y.docu_no AND C.CRP_CD = Y.CRP_CD  and rownum <=100" + request + "order by CASE When '" + f_d + "' = 1 THEN C.DOCU_ISSU_DD END ASC ";
+                MessageBox.Show(request1);
+                cmd.CommandText =  request1;
                
                 
                 bool find_val = false;
