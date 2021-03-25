@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(filter));
             this.CRM = new System.Windows.Forms.CheckBox();
             this.Серия = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
@@ -37,18 +38,20 @@
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // CRM
             // 
             this.CRM.AutoSize = true;
             this.CRM.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CRM.ForeColor = System.Drawing.Color.Black;
+            this.CRM.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.CRM.Location = new System.Drawing.Point(3, 82);
             this.CRM.Name = "CRM";
-            this.CRM.Size = new System.Drawing.Size(79, 29);
+            this.CRM.Size = new System.Drawing.Size(273, 29);
             this.CRM.TabIndex = 2;
-            this.CRM.Text = "CRM";
+            this.CRM.Text = "Наименование клиента:";
             this.CRM.UseVisualStyleBackColor = true;
             this.CRM.CheckedChanged += new System.EventHandler(this.CRM_CheckedChanged);
             // 
@@ -59,9 +62,9 @@
             this.Серия.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.Серия.Location = new System.Drawing.Point(3, 47);
             this.Серия.Name = "Серия";
-            this.Серия.Size = new System.Drawing.Size(196, 29);
+            this.Серия.Size = new System.Drawing.Size(79, 29);
             this.Серия.TabIndex = 3;
-            this.Серия.Text = "Серия договора:";
+            this.Серия.Text = "КЗЛ:";
             this.Серия.UseVisualStyleBackColor = true;
             this.Серия.CheckedChanged += new System.EventHandler(this.Серия_CheckedChanged);
             // 
@@ -80,7 +83,7 @@
             // 
             // Ok
             // 
-            this.Ok.Location = new System.Drawing.Point(591, 178);
+            this.Ok.Location = new System.Drawing.Point(937, 178);
             this.Ok.Name = "Ok";
             this.Ok.Size = new System.Drawing.Size(75, 23);
             this.Ok.TabIndex = 5;
@@ -120,7 +123,7 @@
             // comboBox4
             // 
             this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(197, 53);
+            this.comboBox4.Location = new System.Drawing.Point(101, 52);
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(157, 21);
             this.comboBox4.TabIndex = 39;
@@ -128,10 +131,28 @@
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(370, 53);
+            this.textBox6.Location = new System.Drawing.Point(317, 52);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(747, 20);
             this.textBox6.TabIndex = 40;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(317, 91);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(747, 20);
+            this.textBox1.TabIndex = 41;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // button4
+            // 
+            this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
+            this.button4.Location = new System.Drawing.Point(264, 50);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(23, 23);
+            this.button4.TabIndex = 42;
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // filter
             // 
@@ -139,7 +160,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(44)))), ((int)(((byte)(47)))));
-            this.ClientSize = new System.Drawing.Size(1132, 545);
+            this.ClientSize = new System.Drawing.Size(1076, 255);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.comboBox4);
             this.Controls.Add(this.dateTimePicker2);
@@ -151,6 +174,7 @@
             this.Controls.Add(this.CRM);
             this.Name = "filter";
             this.Text = "Фильтр";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.filter_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -166,5 +190,7 @@
         private System.Windows.Forms.DateTimePicker dateTimePicker2;
         private System.Windows.Forms.ComboBox comboBox4;
         private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button4;
     }
 }
