@@ -8,9 +8,12 @@ namespace app_for_CD
 {
     static class Data
     {
-        public static string st_data_orig { get; set; }
-        public static string end_data_orig { get; set; }
-        public static int f_c { get; set; }
+        public static bool it_ok = false;
+        public static string st_date_orig { get; set; }
+        public static string end_date_orig { get; set; }
+        public static string number_ser = "-1000";
+        public static string name_cl = " ";
+        public static int f_n { get; set; }
         public static int f_s { get; set; }
         public static int f_d { get; set; }
         public static int login = 0;

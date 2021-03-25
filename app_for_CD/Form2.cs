@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,9 @@ using Oracle.DataAccess.Client;
 
 namespace app_for_CD
 {
+    /// <summary>
+    /// закрой connect
+    /// </summary>
 
     public partial class filter : Form
     {
@@ -68,11 +72,11 @@ namespace app_for_CD
             CheckBox checkBox = (CheckBox)sender;
             if (checkBox.Checked == true)
             {
-                Data.f_c = 1;
+                Data.f_n = 1;
             }
             else
             {
-                Data.f_c = 0;
+                Data.f_n = 0;
             }
         }
 
@@ -88,17 +92,9 @@ namespace app_for_CD
                 Data.f_s = 0;
             }
         }
-        string change_format_dateTime(string dt)
-        {
-            string tmp;
-            tmp = "20" + dt[9] + dt[10] + dt[6] + dt[7] + dt[3] + dt[4];
-            return tmp;
-        }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            Data.st_data_orig = change_format_dateTime(dateTimePicker1.Value.ToString());
-            Data.end_data_orig = change_format_dateTime(dateTimePicker2.Value.ToString());
             CheckBox checkBox = (CheckBox)sender;
             if (checkBox.Checked == true)
             {
@@ -110,10 +106,56 @@ namespace app_for_CD
             }
         }
 
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.SetConnection();
+            OracleCommand cmd = con.CreateCommand();
+            cmd.CommandText = "SELECT CRP_CD FROM TBCB_CRP_DOCU_INFO where rownum <=1000";
+
+
+            cmd.CommandType = CommandType.Text;
+            OracleDataReader dr = cmd.ExecuteReader();
+            // List<string[]> data = new List<string[]>();
+            while (dr.Read())
+            {
+                comboBox4.Items.Add(dr[0].ToString());
+            }
+        }
         private void Ok_Click(object sender, EventArgs e)
         {
+            Data.it_ok = true;
+            if (Data.f_d == 1)
+            {
+                DateTime thisDate_st = dateTimePicker1.Value;
+                DateTime thisDate_end = dateTimePicker2.Value;
+                Data.st_date_orig = thisDate_st.ToString("yyyyMMdd").ToString();
+                Data.end_date_orig = thisDate_end.ToString("yyyyMMdd").ToString();
+            }
+            if (Data.f_s == 1)
+            {
+                Data.number_ser = comboBox4.Text.ToString();
+            }
+            if (Data.f_n == 1)
+            {
+                Data.name_cl = textBox1.Text;
+            }
+
             this.Close();
         }
 
+        private void filter_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (Data.it_ok != true)
+            {
+                Data.f_d = 0;
+                Data.f_s = 0;
+                Data.f_n = 0;
+            }
+        }
     }
 }
