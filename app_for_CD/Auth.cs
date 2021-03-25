@@ -44,7 +44,7 @@ namespace app_for_CD
         {
             Data.login = 1;
             string tmp_str;
-            tmp_str = dr[0].ToString();    
+            tmp_str = dr[3].ToString();    
 
             Data.role = Int32.Parse(tmp_str);
         }
@@ -74,6 +74,7 @@ namespace app_for_CD
 
         private void button2_Click(object sender, EventArgs e)
         {
+            Data.exit = false;
             this.Close();
         }
     }

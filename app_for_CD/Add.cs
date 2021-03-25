@@ -67,6 +67,7 @@ namespace app_for_CD
                 button2.Visible = false;
                 comboBox4.Enabled = false;
                 comboBox5.Enabled = false;
+                dateTimePicker3.Visible = true;
                 //textBox6.Enabled = false;
                 //inverse_parse_date("20801231", dateTimePicker3);
 
@@ -283,7 +284,7 @@ namespace app_for_CD
             OracleCommand cmd = con.CreateCommand();
             cmd.Parameters.Add(new OracleParameter("KZL", comboBox4.Text));
             cmd.Parameters.Add(new OracleParameter("KZL_NM", textBox6.Text));
-            string issu_dd = parse_date(dateTimePicker5.Value.ToString(), 2);
+            string issu_dd = dateTimePicker5.Value.ToString("yyyyMMdd");
             cmd.Parameters.Add(new OracleParameter("ISSU_DD", issu_dd));
             cmd.Parameters.Add(new OracleParameter("DOC_NUM", comboBox5.Text));
             cmd.CommandText = "insert into tbcb_crp_info(CRP_CD, CRP_TYPE_CD, SHRT_CRP_NM, CRP_NM, crp_cat_cd, crp_stat_cd, crp_issu_dd,DOCU_NO)values(:KZL, 7001, 'hello', :KZL_NM, '3', '1', :ISSU_DD,:DOC_NUM)";
@@ -296,9 +297,9 @@ namespace app_for_CD
             cmd.Parameters.Add(new OracleParameter("KZL", comboBox4.Text));
             cmd.Parameters.Add(new OracleParameter("NUM_DOCU", comboBox5.Text));
             cmd.Parameters.Add(new OracleParameter("SER_DOCU", comboBox1.Text));
-            string st_date = parse_date(dateTimePicker1.Value.ToString(), 2);
+            string st_date = dateTimePicker1.Value.ToString("yyyyMMdd");
             cmd.Parameters.Add(new OracleParameter("DOCU_ISSU", st_date));
-            string end_date = parse_date(dateTimePicker2.Value.ToString(), 2);
+            string end_date = dateTimePicker2.Value.ToString("yyyyMMdd");
             cmd.Parameters.Add(new OracleParameter("EXP_DOCU", end_date));
             cmd.Parameters.Add(new OracleParameter("REM1", textBox7.Text));
             cmd.Parameters.Add(new OracleParameter("REM2", textBox8.Text));
@@ -320,7 +321,7 @@ namespace app_for_CD
             var price = textBox3.Text.ToString();
             cmd.Parameters.Add(new OracleParameter("DOCU_PR", price));
 
-            var date = parse_date(dateTimePicker4.Value.ToString(), 2);
+            var date = dateTimePicker4.Value.ToString("yyyyMMdd");
             cmd.Parameters.Add(new OracleParameter("REC", date));
             string docu_num = comboBox5.Text.ToString();
             cmd.Parameters.Add(new OracleParameter("DOCU_NO", docu_num));
@@ -350,47 +351,6 @@ namespace app_for_CD
             if (str == "Сумма")
                 return 1;
             return 2;
-        }
-        string parse_date(string str, int flag = 0)
-        {
-            string tmp_str = "" ;
-            if (flag == 1)
-            {
-                tmp_str += str[3];
-                tmp_str += str[4];
-                tmp_str += ".";
-                tmp_str += str[6];
-                tmp_str += str[7];
-                tmp_str += ".";
-                //tmp_str += "20";
-                // tmp_str += str[9];
-                // tmp_str += str[10];
-                tmp_str += str[9];
-                tmp_str += str[10];
-
-
-                return tmp_str;
-            }
-            if (flag == 2)
-            {
-                tmp_str += "20";
-                tmp_str += str[9];
-                tmp_str += str[10];
-                tmp_str += str[6];
-                tmp_str += str[7];
-                tmp_str += str[3];
-                tmp_str += str[4];
-                return tmp_str;
-            }
-            tmp_str += " ";
-            tmp_str += str[12];
-            tmp_str += str[13];
-            tmp_str += ":";
-            tmp_str += str[15];
-            tmp_str += str[16];
-            tmp_str += ":";
-            tmp_str += "00";
-            return tmp_str;
         }
         void inverse_parse_date(string str, DateTimePicker dateTimePicker_tmp)
         {
@@ -461,6 +421,7 @@ namespace app_for_CD
                     textBox4.Text = check_null(dr[5].ToString());
                     comboBox2.Text = check_null(dr[7].ToString());
                     comboBox6.Text = check_null(dr[8].ToString());
+                    if (dr[9].ToString() != "")
                     inverse_parse_date(dr[9].ToString(), dateTimePicker3);
 
                 }
@@ -474,7 +435,7 @@ namespace app_for_CD
             cmd.Parameters.Add(new OracleParameter("DOCU_NO", doc_num_));
             cmd.Parameters.Add(new OracleParameter("DOC_SER", ser_num_ ));
 
-            cmd.CommandText = "Select remark, remark_2, docu_issu_dd, docu_exp_dd from tbcb_crp_docu_info where crp_cd = :KZL AND docu_no = :DOCU_NO and DOCU_SRES = :DOC_SER";
+            cmd.CommandText = "Select remark, remark_2, docu_issu_dd, docu_exp_dd, docu_stat_cd from tbcb_crp_docu_info where crp_cd = :KZL AND docu_no = :DOCU_NO and DOCU_SRES = :DOC_SER";
             cmd.CommandType = CommandType.Text;
             OracleDataReader dr = cmd.ExecuteReader();
             if (dr.HasRows)
@@ -485,6 +446,7 @@ namespace app_for_CD
                     textBox8.Text = check_null(dr[1].ToString());
                     inverse_parse_date(dr[2].ToString(), dateTimePicker1);
                     inverse_parse_date(dr[3].ToString(), dateTimePicker2);
+                    comboBox3.Text = check_stat(dr[4].ToString());
                 }
             }
 
@@ -502,7 +464,7 @@ namespace app_for_CD
                 while (dr.Read())
                 {
                     string tmp_str = dr[0].ToString();
-                    comboBox3.Text = check_stat(dr[0].ToString());
+                    //comboBox3.Text = check_stat(dr[0].ToString());
                     if (dr[0].ToString() == "4")
                     {
                         dateTimePicker3.Visible = true;
@@ -547,7 +509,7 @@ namespace app_for_CD
             cmd.Parameters.Add(new OracleParameter("CRP_STAT", str));
             cmd.Parameters.Add(new OracleParameter("DOC_NUM", comboBox5.Text));
 
-            string issu_dd = parse_date(dateTimePicker5.Value.ToString(), 2);
+            string issu_dd = dateTimePicker5.Value.ToString("yyyyMMdd");
             cmd.Parameters.Add(new OracleParameter("ISSU_DD", issu_dd));
             cmd.Parameters.Add(new OracleParameter("KZL", kzl_));
             cmd.CommandText = "update tbcb_crp_info set crp_cat_cd = :CRP_CAT, crp_stat_cd= :CRP_STAT, DOCU_NO = :DOC_NUM, crp_issu_dd = :ISSU_DD where CRP_CD = :KZL";
@@ -559,9 +521,9 @@ namespace app_for_CD
             OracleCommand cmd = con.CreateCommand();
 
             cmd.Parameters.Add(new OracleParameter("SER_DOCU", comboBox1.Text));
-            string st_date = parse_date(dateTimePicker1.Value.ToString(), 2);
+            string st_date = dateTimePicker1.Value.ToString("yyyyMMdd");
             cmd.Parameters.Add(new OracleParameter("DOCU_ISSU", st_date));
-            string end_date = parse_date(dateTimePicker2.Value.ToString(), 2);
+            string end_date = dateTimePicker2.Value.ToString("yyyyMMdd");
             cmd.Parameters.Add(new OracleParameter("EXP_DOCU", end_date));
             cmd.Parameters.Add(new OracleParameter("REM1", textBox7.Text));
             cmd.Parameters.Add(new OracleParameter("REM2", textBox8.Text));
@@ -583,7 +545,7 @@ namespace app_for_CD
 
                 var price = textBox3.Text.ToString();
                 cmd.Parameters.Add(new OracleParameter("DOCU_PR", price));
-                var date = parse_date(dateTimePicker4.Value.ToString(), 2);
+                var date = dateTimePicker4.Value.ToString("yyyyMMdd");
                 cmd.Parameters.Add(new OracleParameter("REC", date));
                 cmd.Parameters.Add(new OracleParameter("ARCHEE", textBox2.Text));
                 cmd.Parameters.Add(new OracleParameter("DESCR", textBox4.Text));
@@ -591,7 +553,7 @@ namespace app_for_CD
                 cmd.Parameters.Add(new OracleParameter("ISCHIS", tmp_int));
                 cmd.Parameters.Add(new OracleParameter("PAR_ISCHIS", comboBox2.Text));
                 cmd.Parameters.Add(new OracleParameter("CURRENCY", comboBox6.Text));
-                cmd.Parameters.Add(new OracleParameter("BLOCK", parse_date(dateTimePicker3.Value.ToString(), 2)));
+                cmd.Parameters.Add(new OracleParameter("BLOCK", dateTimePicker3.Value.ToString("yyyyMMdd")));
 
                 cmd.Parameters.Add(new OracleParameter("KZL", comboBox4.Text));
                 string docu_num = comboBox5.Text.ToString();
