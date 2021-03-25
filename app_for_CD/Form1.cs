@@ -458,6 +458,12 @@ namespace app_for_CD
             
         }
 
+        private void button10_Click(object sender, EventArgs e)
+        {
+            Add_user new_us = new Add_user();
+            new_us.Show();
+        }
+
         int query_delete_from_NEW_TBCB()
         {
             OracleCommand cmd = con.CreateCommand();
