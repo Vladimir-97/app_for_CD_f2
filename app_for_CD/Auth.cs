@@ -74,6 +74,7 @@ namespace app_for_CD
 
         private void button2_Click(object sender, EventArgs e)
         {
+            Data.exit = false;
             this.Close();
         }
     }

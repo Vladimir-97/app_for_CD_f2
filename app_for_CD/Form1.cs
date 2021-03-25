@@ -238,6 +238,27 @@ namespace app_for_CD
 
         private void Form_agreement_Load(object sender, EventArgs e)
         {
+            //Auth auth = new Auth();   ////раскоментировать при сдаче
+            //auth.ShowDialog();
+            //if (Data.login == 1)
+            //{
+                updatePanel2();
+                button_disabled();
+            //}
+            //else { 
+            
+            //    if (Data.login == 0 && Data.exit == true)
+            //    {
+            //        incorrect_pass();
+            //    }
+            //    else if (Data.login == 0 && Data.exit == false)
+            //    {
+            //        this.Close();
+            //    }
+            //}
+        }
+        void incorrect_pass()
+        {
             Auth auth = new Auth();
             auth.ShowDialog();
             if (Data.login == 1)
@@ -245,11 +266,12 @@ namespace app_for_CD
                 updatePanel2();
                 button_disabled();
             }
-            else { 
-            
+            else
+            {
+
                 if (Data.login == 0 && Data.exit == true)
                 {
-                    MessageBox.Show("Неправильное имя или пароль");
+                    incorrect_pass();
                 }
                 else if (Data.login == 0 && Data.exit == false)
                 {
@@ -304,20 +326,12 @@ namespace app_for_CD
             add.Show();
             updatePanel2();
         }
-
-        string change_format_dateTime(string dt)
-        {
-            string tmp ="";
-            tmp += dt[6].ToString() + dt[7].ToString() + dt[8].ToString() + dt[9].ToString();
-            tmp+= dt[3].ToString() + dt[4].ToString() + dt[0].ToString() + dt[1].ToString();
-            return tmp;
-        }
         private void button1_Click(object sender, EventArgs e)
         {
             
             string st_date, end_date;
-            st_date = change_format_dateTime(dateTimePicker1.Value.ToString());
-            end_date = change_format_dateTime(dateTimePicker2.Value.ToString());
+            st_date = dateTimePicker1.Value.ToString("yyyyMMdd");
+            end_date = dateTimePicker2.Value.ToString("yyyyMMdd");
             OracleCommand cmd = con.CreateCommand();
             cmd.Parameters.Add("ST_DATE", OracleDbType.Varchar2, 8).Value = st_date;
             cmd.Parameters.Add("END_DATE", OracleDbType.Varchar2, 8).Value = end_date;
@@ -391,8 +405,8 @@ namespace app_for_CD
                 OracleCommand cmd = con.CreateCommand();
                 if (f_d == 1)
                 {
-                    st_date = change_format_dateTime(dateTimePicker1.Value.ToString());
-                    end_date = change_format_dateTime(dateTimePicker2.Value.ToString());
+                    st_date = dateTimePicker1.Value.ToString("yyyyMMdd");
+                    end_date = dateTimePicker2.Value.ToString("yyyyMMdd");
                     
                     cmd.Parameters.Add("ST_DATE", OracleDbType.Varchar2, 8).Value = st_date;
                     cmd.Parameters.Add("END_DATE", OracleDbType.Varchar2, 8).Value = end_date;
