@@ -238,18 +238,53 @@ namespace app_for_CD
 
         private void Form_agreement_Load(object sender, EventArgs e)
         {
+            Auth auth = new Auth();   ////раскоментировать при сдаче
+            auth.ShowDialog();
+            if (Data.login == 1)
+            {
+                if (Data.role == 0)
+                {
+                    button10.Visible = false;
+                    button3.Visible = false;
+
+                }
+                updatePanel2();
+                button_disabled();
+            }
+            else
+            {
+
+                if (Data.login == 0 && Data.exit == true)
+                {
+                    incorrect_pass();
+                }
+                else if (Data.login == 0 && Data.exit == false)
+                {
+                    this.Close();
+                }
+            }
+        }
+        void incorrect_pass()
+        {
             Auth auth = new Auth();
             auth.ShowDialog();
             if (Data.login == 1)
             {
+                if (Data.role == 0)
+                {
+                    button10.Visible = false;
+                    button3.Visible = false;
+
+                }
                 updatePanel2();
                 button_disabled();
             }
-            else { 
-            
+            else
+            {
+
                 if (Data.login == 0 && Data.exit == true)
                 {
-                    MessageBox.Show("Неправильное имя или пароль");
+                    incorrect_pass();
                 }
                 else if (Data.login == 0 && Data.exit == false)
                 {
@@ -305,19 +340,12 @@ namespace app_for_CD
             updatePanel2();
         }
 
-        string change_format_dateTime(string dt)
-        {
-            string tmp ="";
-            tmp += dt[6].ToString() + dt[7].ToString() + dt[8].ToString() + dt[9].ToString();
-            tmp+= dt[3].ToString() + dt[4].ToString() + dt[0].ToString() + dt[1].ToString();
-            return tmp;
-        }
         private void button1_Click(object sender, EventArgs e)
         {
             
             string st_date, end_date;
-            st_date = change_format_dateTime(dateTimePicker1.Value.ToString());
-            end_date = change_format_dateTime(dateTimePicker2.Value.ToString());
+            st_date = dateTimePicker1.Value.ToString("yyyyMMdd");
+            end_date = dateTimePicker2.Value.ToString("yyyyMMdd");
             OracleCommand cmd = con.CreateCommand();
             cmd.Parameters.Add("ST_DATE", OracleDbType.Varchar2, 8).Value = st_date;
             cmd.Parameters.Add("END_DATE", OracleDbType.Varchar2, 8).Value = end_date;
@@ -326,7 +354,7 @@ namespace app_for_CD
             //cmd.CommandText = "SELECT DISTINCT c.*, Y.DOCU_PRICE, Y.GET_DD FROM (SELECT B.DOCU_NO, B.DOCU_SRES, B.DOCU_ISSU_DD, B.DOCU_STAT_CD, A.CRP_CD, A.CRP_NM, A.DIST_ID_2, B.CRTE_DT FROM TBCB_CRP_INFO A INNER JOIN TBCB_CRP_DOCU_INFO B ON A.CRP_CD = B.CRP_CD) c , NEW_TBCB y where c.docu_no = y.docu_no and rownum <=100 AND DOCU_ISSU_DD  >= :ST_DATE  AND DOCU_ISSU_DD <= :END_DATE order by C.DOCU_ISSU_DD";
             cmd.CommandText = "SELECT DISTINCT c.*, Y.DOCU_PRICE, Y.GET_DD FROM(SELECT B.DOCU_NO, B.DOCU_SRES, B.DOCU_ISSU_DD, B.DOCU_STAT_CD, A.CRP_CD, A.CRP_NM, A.DIST_ID_2, A.crp_issu_dd FROM TBCB_CRP_INFO A INNER JOIN TBCB_CRP_DOCU_INFO B ON A.CRP_CD = B.CRP_CD) c , NEW_TBCB y where c.docu_no = y.docu_no AND C.CRP_CD = Y.CRP_CD and rownum<=100  AND DOCU_ISSU_DD  >= :ST_DATE  AND DOCU_ISSU_DD <= :END_DATE order by C.DOCU_ISSU_DD ";
 
-
+            //ыва
             bool find_val = false;
 
             cmd.CommandType = CommandType.Text;
@@ -377,32 +405,34 @@ namespace app_for_CD
 
         private void button6_Click(object sender, EventArgs e)
         {
-            int f_c, f_s, f_d;
+            int f_n, f_s, f_d;
             filter f = new filter();
             f.ShowDialog();
 
-            f_c = Data.f_c;
+            f_n = Data.f_n;
             f_s = Data.f_s;
             f_d = Data.f_d;
 
-            if (f_c == 1 || f_s == 1 || f_d == 1) {
+            if (f_n == 1 || f_s == 1 || f_d == 1) {
+                string request = "";
 
-                string st_date, end_date;
                 OracleCommand cmd = con.CreateCommand();
                 if (f_d == 1)
                 {
-                    st_date = change_format_dateTime(dateTimePicker1.Value.ToString());
-                    end_date = change_format_dateTime(dateTimePicker2.Value.ToString());
-                    
-                    cmd.Parameters.Add("ST_DATE", OracleDbType.Varchar2, 8).Value = st_date;
-                    cmd.Parameters.Add("END_DATE", OracleDbType.Varchar2, 8).Value = end_date;
+                    request = $" AND DOCU_ISSU_DD  >= {Data.st_date_orig}  AND DOCU_ISSU_DD <= {Data.end_date_orig} ";
                 }
-                //////////////////////         cmd.CommandText = "SELECT B.DOCU_NO, B.DOCU_SRES, B.DOCU_ISSU_DD, B.DOCU_STAT_CD, A.CRP_CD, A.CRP_NM, DIST_ID_2 FROM TBCB_CRP_INFO A INNER JOIN TBCB_CRP_DOCU_INFO B ON A.CRP_CD = B.CRP_CD where rownum <= 50 AND DOCU_ISSU_DD  > :ST_DATE  AND DOCU_ISSU_DD < :END_DATE"; ;
-                //cmd.CommandText = "SELECT DISTINCT c.*, Y.DOCU_PRICE, Y.GET_DD FROM (SELECT B.DOCU_NO, B.DOCU_SRES, B.DOCU_ISSU_DD, B.DOCU_STAT_CD, A.CRP_CD, A.CRP_NM, A.DIST_ID_2, B.CRTE_DT FROM TBCB_CRP_INFO A INNER JOIN TBCB_CRP_DOCU_INFO B ON A.CRP_CD = B.CRP_CD) c , NEW_TBCB y where c.docu_no = y.docu_no and rownum <=100 AND DOCU_ISSU_DD  >= :ST_DATE  AND DOCU_ISSU_DD <= :END_DATE order by C.DOCU_ISSU_DD";
+                if (f_s == 1)
+                {
+                    request = request + $" AND C.CRP_CD = {Data.number_ser} ";
+                }
+                if (f_n == 1)
+                {
+                    request = request + $" AND C.CRP_NM = '{Data.name_cl}' ";
+                }
 
-                cmd.CommandText = "SELECT DISTINCT c.*, Y.DOCU_PRICE, Y.GET_DD FROM (SELECT B.DOCU_NO, B.DOCU_SRES, B.DOCU_ISSU_DD, B.DOCU_STAT_CD, A.CRP_CD, A.CRP_NM, A.DIST_ID_2, A.crp_issu_dd FROM TBCB_CRP_INFO A INNER JOIN TBCB_CRP_DOCU_INFO B ON A.CRP_CD = B.CRP_CD) c , NEW_TBCB y where c.docu_no = y.docu_no AND C.CRP_CD = Y.CRP_CD  and rownum <=100 AND DOCU_ISSU_DD  >= :ST_DATE  AND DOCU_ISSU_DD <= :END_DATE order by CASE When '" + f_d + "' = 1 THEN C.DOCU_ISSU_DD END ASC ";
-               
-                
+
+                cmd.CommandText = "SELECT DISTINCT c.*, Y.DOCU_PRICE, Y.GET_DD FROM (SELECT B.DOCU_NO, B.DOCU_SRES, B.DOCU_ISSU_DD, B.DOCU_STAT_CD, A.CRP_CD, A.CRP_NM, A.DIST_ID_2, A.crp_issu_dd FROM TBCB_CRP_INFO A INNER JOIN TBCB_CRP_DOCU_INFO B ON A.CRP_CD = B.CRP_CD) c , NEW_TBCB y where c.docu_no = y.docu_no AND C.CRP_CD = Y.CRP_CD  and rownum <=100" + request + "order by CASE When '" + f_d + "' = 1 THEN C.DOCU_ISSU_DD END ASC ";
+
                 bool find_val = false;
 
                 cmd.CommandType = CommandType.Text;
@@ -425,10 +455,16 @@ namespace app_for_CD
 
             }
 
-            Data.f_c = 0;
+            Data.f_n = 0;
             Data.f_s = 0;
             Data.f_d = 0;
             
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            Add_user new_us = new Add_user();
+            new_us.Show();
         }
 
         int query_delete_from_NEW_TBCB()
